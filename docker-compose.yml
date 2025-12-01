@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: wotstats
       POSTGRES_PASSWORD: wotstats
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
       - ./server/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
@@ -20,6 +20,10 @@ services:
       - DATABASE_URL=${DATABASE_URL:-postgres://wotstats:wotstats@db:5432/wotstats}
       - PUBLIC_URL=http://localhost:3000
       - CLIENT_URL=http://localhost:4173
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
     depends_on:
@@ -31,10 +35,11 @@ services:
       - ./web/.env.example
     environment:
       - VITE_API_URL=http://localhost:3000
+    command: sh -c "npm install && npm run build && serve -s dist -l 4173"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
     ports:
       - "4173:4173"
     depends_on:
       - api
-
-volumes:
-  db_data:
