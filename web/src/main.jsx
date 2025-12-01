@@ -25,7 +25,7 @@ function App() {
       if (res.ok) {
         setStats(data.stats);
       } else {
-        setError(data.message || 'Не удалось получить статистику');
+        setError(data.message || 'Не вдалося отримати статистику');
       }
     } finally {
       setLoading(false);
@@ -44,7 +44,7 @@ function App() {
       if (res.ok) {
         setStats(data.stats);
       } else {
-        setError(data.message || 'Не удалось обновить статистику');
+        setError(data.message || 'Не вдалося оновити статистику');
       }
     } finally {
       setLoading(false);
@@ -67,14 +67,14 @@ function App() {
     <div className="page">
       <header className="hero">
         <h1>Wargaming OAuth + статистика</h1>
-        <p>Авторизуйтесь через Wargaming и соберите свою игровую статистику.</p>
+        <p>Авторизуйтеся через Wargaming та зберіть свою ігрову статистику.</p>
         {!session.authenticated ? (
           <a className="button" href={loginUrl}>
-            Войти через Wargaming
+            Увійти через Wargaming
           </a>
         ) : (
           <button className="button" onClick={refreshStats} disabled={loading}>
-            {loading ? 'Обновляем...' : 'Обновить статистику'}
+            {loading ? 'Оновлюємо...' : 'Оновити статистику'}
           </button>
         )}
       </header>
@@ -94,7 +94,7 @@ function App() {
                 setStats(null);
               }}
             >
-              Выйти
+              Вийти
             </button>
           </div>
 
@@ -103,26 +103,26 @@ function App() {
           {stats ? (
             <div className="grid">
               <div className="stat">
-                <span className="label">Бои</span>
+                <span className="label">Бої</span>
                 <span className="value">{stats.battles}</span>
               </div>
               <div className="stat">
-                <span className="label">Победы</span>
+                <span className="label">Перемоги</span>
                 <span className="value">{stats.wins}</span>
               </div>
               <div className="stat">
-                <span className="label">Урон</span>
+                <span className="label">Шкода</span>
                 <span className="value">{stats.damage_dealt}</span>
               </div>
               {stats.last_synced && (
                 <div className="stat">
-                  <span className="label">Синхронизировано</span>
+                  <span className="label">Синхронізовано</span>
                   <span className="value">{new Date(stats.last_synced).toLocaleString()}</span>
                 </div>
               )}
             </div>
           ) : (
-            <p>После авторизации мы загрузим вашу статистику.</p>
+            <p>Після авторизації ми завантажимо вашу статистику.</p>
           )}
         </section>
       )}

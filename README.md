@@ -1,41 +1,47 @@
-# WoT Stats in Docker
+# WoT Stats у Docker
 
-Минимальный шаблон для авторизации через OAuth Wargaming, сохранения токена в Postgres и вывода ключевой статистики игрока через React.
+Мінімальний шаблон для авторизації через OAuth Wargaming, збереження токена в Postgres і показу ключової статистики гравця через React.
 
-## Что входит
-- **API (Node.js + Express)**: OAuth-авторизация, сессии, эндпоинты для получения и обновления статистики.
-- **Web (React + Vite)**: простая страница с кнопкой входа и карточкой статистики.
-- **Postgres**: хранит пользователей и их последнюю синхронизацию.
-- **Docker Compose**: поднимает все сервисы одной командой.
+## Що входить
+- **API (Node.js + Express)**: OAuth-авторизація, сесії, ендпоінти для отримання й оновлення статистики.
+- **Web (React + Vite)**: проста сторінка з кнопкою входу та карткою статистики.
+- **Postgres**: зберігає користувачів і їхню останню синхронізацію.
+- **Docker Compose**: підіймає всі сервіси однією командою.
 
 ## Запуск
-1. Скопируйте примеры переменных окружения и заполните `WG_APPLICATION_ID`:
+1. Скопіюйте приклади змінних середовища та заповніть `WG_APPLICATION_ID`:
    ```bash
    cp server/.env.example server/.env
    cp web/.env.example web/.env
    ```
-2. Запустите контейнеры:
+2. Запустіть контейнери:
    ```bash
    docker-compose up --build
    ```
-3. Откройте интерфейс: http://localhost:4173
+   Якщо ви оновлювали значення у будь-якому `.env` файлі, пересберіть образи:
+   ```bash
+   docker-compose down
+   docker-compose build
+   docker-compose up
+   ```
+3. Відкрийте інтерфейс: http://localhost:4173
 
-## Настройка OAuth Wargaming
-- Зарегистрируйте приложение в Wargaming Developer Room и получите `application_id`.
-- В настройках приложения пропишите redirect URL: `http://localhost:3000/auth/callback`.
-- Значение `WG_REGION` можно поменять (`eu`, `ru`, `asia`, `na`).
+## Налаштування OAuth Wargaming
+- Зареєструйте застосунок у Wargaming Developer Room і отримайте `application_id`.
+- У налаштуваннях застосунку додайте redirect URL: `http://localhost:3000/auth/callback`.
+- Значення `WG_REGION` можна змінити (`eu`, `ru`, `asia`, `na`).
 
-## Основные эндпоинты API
-- `GET /auth/login` — редиректит на Wargaming OAuth.
-- `GET /auth/callback` — принимает `access_token`, сохраняет пользователя и создаёт сессию.
-- `GET /api/session` — проверка авторизации.
-- `GET /api/stats` — отдаёт сохранённую статистику или подтягивает её с Wargaming.
-- `POST /api/stats/refresh` — принудительная синхронизация.
-- `POST /auth/logout` — сбрасывает сессию.
+## Основні ендпоінти API
+- `GET /auth/login` — редіректить на Wargaming OAuth.
+- `GET /auth/callback` — приймає `access_token`, зберігає користувача й створює сесію.
+- `GET /api/session` — перевірка авторизації.
+- `GET /api/stats` — віддає збережену статистику або підтягує її з Wargaming.
+- `POST /api/stats/refresh` — примусова синхронізація.
+- `POST /auth/logout` — скидає сесію.
 
 ## Структура
 ```
-server/  # Express API и SQL для Postgres
+server/  # Express API та SQL для Postgres
 web/     # React SPA (Vite)
 docker-compose.yml
 ```

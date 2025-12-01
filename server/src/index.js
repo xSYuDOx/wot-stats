@@ -49,7 +49,7 @@ app.get('/auth/callback', async (req, res) => {
   const { access_token, account_id, nickname, expires_at, status } = req.query;
 
   if (status !== 'ok' || !access_token || !account_id) {
-    return res.status(400).json({ message: 'OAuth callback missing required fields' });
+    return res.status(400).json({ message: 'У відповіді OAuth немає потрібних полів' });
   }
 
   const expiry = new Date(Number(expires_at) * 1000);
@@ -93,7 +93,7 @@ async function upsertStats(accountId) {
     [accountId]
   );
   if (!rows[0]) {
-    throw new Error('Missing or expired token. Please login again.');
+    throw new Error('Немає дійсного токена. Увійдіть ще раз.');
   }
   const token = rows[0].access_token;
   const stats = await fetchPlayerStats(accountId, token);
@@ -114,7 +114,7 @@ async function upsertStats(accountId) {
 
 app.get('/api/stats', async (req, res) => {
   if (!req.session.accountId) {
-    return res.status(401).json({ message: 'Not authenticated' });
+    return res.status(401).json({ message: 'Не авторизовано' });
   }
   const { rows } = await db.query('SELECT battles, wins, damage_dealt, last_synced FROM player_stats WHERE account_id=$1', [
     req.session.accountId,
@@ -132,7 +132,7 @@ app.get('/api/stats', async (req, res) => {
 
 app.post('/api/stats/refresh', async (req, res) => {
   if (!req.session.accountId) {
-    return res.status(401).json({ message: 'Not authenticated' });
+    return res.status(401).json({ message: 'Не авторизовано' });
   }
   try {
     const stats = await upsertStats(req.session.accountId);
